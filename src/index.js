@@ -38,40 +38,30 @@ const MORSE_TABLE = {
 };
 
 function decode(expr) {
+    let decodedText = '';
 
-    let arraytoFill = [];
+    for (let i = 0; i < expr.length; i = i + 10) {
 
-    const arrayFromExpr = expr.split('');
+        let subStr = expr.substring(i, i + 10);
+        if (subStr === '**********') {
+            decodedText += ' ';
+            continue;
+        }
 
-    arrayFromExpr.forEach((element, index) => {
-        Object.getOwnPropertyNames(MORSE_TABLE).some(value => {
-            if (MORSE_TABLE[value] === element) {
-                arraytoFill[index] = (Object.keys(MORSE_TABLE).find(key => MORSE_TABLE[key] === MORSE_TABLE[value])).split('');
+        let morseText = '';
+
+        for (let i = 0; i < 10; i = i + 2) {
+            if (subStr.substring(i, i + 2) === '10') {
+                morseText += '.';
             }
-        });
-        if (element === ' ') {
-            arraytoFill[index] = ['**********'];
+            if (subStr.substring(i, i + 2) === '11') {
+                morseText += '-';
+            }
         }
-        for (let i = 0; i < arraytoFill[index].length; i++) {
-            if (arraytoFill[index][i] === '.') {
-                arraytoFill[index][i] = '10';
-            };
-            if (arraytoFill[index][i] === '-') {
-                arraytoFill[index][i] = '11';
-            };
-        }
-    });
-
-    for (let i = 0; i < arraytoFill.length; i++) {
-        if (arraytoFill[i].length < 5 && arraytoFill[i] != '**********') {
-            arraytoFill[i] = arraytoFill[i].join('').padStart(10, '0');
-        }
-        if (arraytoFill[i] == '**********') {
-            arraytoFill[i] = arraytoFill[i].join('');
-        }
+        decodedText += MORSE_TABLE[morseText];
     }
 
-    return arraytoFill.join('');
+    return decodedText;
 }
 
 module.exports = {
